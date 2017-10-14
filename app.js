@@ -1,8 +1,9 @@
 // Imports
-const express    = require('express'),
-      app        = express(),
-      bodyParser = require('body-parser'),
-      mongoose   = require('mongoose')
+const express        = require('express'),
+      app            = express(),
+      bodyParser     = require('body-parser'),
+      mongoose       = require('mongoose'),
+      methodOverride = require('method-override')
 
 const PORT = 3000;
 
@@ -13,6 +14,7 @@ mongoose.connect('mongodb://localhost/restful_blog_app', {useMongoClient: true})
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 
 // Mongoose config
 const blogSchema = new mongoose.Schema({
@@ -65,6 +67,28 @@ app.get('/blogs/:id', (req, res) => {
     Blog.findById(req.params.id)
         .then(blog => {
             res.render('show', {blog});
+        })
+        .catch(err => {
+            res.redirect('/blogs');
+        });
+});
+
+// Edit 
+app.get('/blogs/:id/edit', (req, res) => {
+    Blog.findById(req.params.id)
+        .then(blog => {
+            res.render('edit', {blog});
+        })
+        .catch(err => {
+            res.redirect('/blogs');
+        });
+});
+
+// Update
+app.put('/blogs/:id', (req, res) => {
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog)
+        .then(blog => {
+            res.redirect(`/blogs/${req.params.id}`);
         })
         .catch(err => {
             res.redirect('/blogs');
