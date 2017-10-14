@@ -44,6 +44,21 @@ app.get('/blogs', (req, res) => {
         });
 });
 
+// New
+app.get('/blogs/new', (req, res) => {
+    res.render('new');
+});
+
+// Create
+app.post('/blogs', (req, res) => {
+    Blog.create(req.body.blog)
+        .then(blog => {
+            res.redirect('/blogs');
+        })
+        .catch(err => {
+            res.render('new');
+        });
+});
 
 // App listen
 app.listen(PORT, () => {
