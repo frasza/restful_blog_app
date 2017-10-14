@@ -1,0 +1,1 @@
+#Simple RESTful Blog App built with Node.js, Express, MongoDB and SemanticUI
