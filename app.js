@@ -1,9 +1,10 @@
 // Imports
-const express        = require('express'),
-      app            = express(),
-      bodyParser     = require('body-parser'),
-      mongoose       = require('mongoose'),
-      methodOverride = require('method-override')
+const express          = require('express'),
+      app              = express(),
+      bodyParser       = require('body-parser'),
+      mongoose         = require('mongoose'),
+      methodOverride   = require('method-override'),
+      expressSanitizer = require('express-sanitizer');
 
 const PORT = 3000;
 
@@ -15,6 +16,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+app.use(expressSanitizer());
 
 // Mongoose config
 const blogSchema = new mongoose.Schema({
@@ -53,6 +55,7 @@ app.get('/blogs/new', (req, res) => {
 
 // Create
 app.post('/blogs', (req, res) => {
+    req.body.blog.body = req.sanitize(req.body.blog.body)
     Blog.create(req.body.blog)
         .then(blog => {
             res.redirect('/blogs');
@@ -86,12 +89,24 @@ app.get('/blogs/:id/edit', (req, res) => {
 
 // Update
 app.put('/blogs/:id', (req, res) => {
+    req.body.blog.body = req.sanitize(req.body.blog.body)
     Blog.findByIdAndUpdate(req.params.id, req.body.blog)
         .then(blog => {
             res.redirect(`/blogs/${req.params.id}`);
         })
         .catch(err => {
             res.redirect('/blogs');
+        });
+});
+
+// Delete
+app.delete('/blogs/:id', (req, res) => {
+    Blog.findByIdAndRemove(req.params.id)
+        .then(blog => {
+            res.redirect('/blogs');
+        })
+        .catch(err => {
+            res.redirect(`/blogs`);
         });
 });
 
