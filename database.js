@@ -1,4 +1,4 @@
-mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 // Mongoose config
 mongoose.Promise = global.Promise;
