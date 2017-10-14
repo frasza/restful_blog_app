@@ -60,6 +60,17 @@ app.post('/blogs', (req, res) => {
         });
 });
 
+// Show
+app.get('/blogs/:id', (req, res) => {
+    Blog.findById(req.params.id)
+        .then(blog => {
+            res.render('show', {blog});
+        })
+        .catch(err => {
+            res.redirect('/blogs');
+        });
+});
+
 // App listen
 app.listen(PORT, () => {
     console.log(`Server is up and running on port ${PORT}.`);
