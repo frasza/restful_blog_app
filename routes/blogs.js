@@ -1,6 +1,7 @@
 const express = require('express');
-const Blog = require('./../database');
 const router = express.Router();
+
+const Blog = require('./../models/blog');
 
 // RESTful routes
 
