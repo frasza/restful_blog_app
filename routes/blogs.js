@@ -3,6 +3,13 @@ const router = express.Router();
 
 const Blog = require('./../models/blog');
 
+const isAuthenticated = require('./../middleware/auth');
+
+router.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+});
+
 // RESTful routes
 
 router.get('/', (req, res) => {
@@ -21,7 +28,7 @@ router.get('/blogs', (req, res) => {
 });
 
 // New
-router.get('/blogs/new', (req, res) => {
+router.get('/blogs/new', isAuthenticated, (req, res) => {
     res.render('new');
 });
 

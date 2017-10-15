@@ -4,6 +4,11 @@ const passport = require('passport');
 
 const User = require('./../models/user');
 
+router.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+});
+
 // Register
 router.get('/register', (req, res) => {
     res.render('register');

@@ -19,9 +19,12 @@
             <a href="/" class="item">Home</a>
             <a href="/blogs/new" class="item">New Post</a>
             <div class="right menu">
+                <% if (user) { %>
+                <a class="ui item" href="/user/logout">Logout</a>
+                <% } else { %>
                 <a class="ui item" href="/user/register">Register</a>
                 <a class="ui item" href="/user/login">Login</a>
-                <!-- <a class="ui item" href="/user/logout">Logout</a> -->
+                <% } %>
             </div>
         </div>
     </div>
