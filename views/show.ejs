@@ -14,12 +14,14 @@
                 <p><%- blog.body %></p>
             </div>
             <div class="extra">
-                <span><%= blog.author.username %></span>
+                <span>Posted by: <%= blog.author.username %></span>
             </div>
-            <a class="ui orange basic button" href="/blogs/<%= blog._id %>/edit">Edit</a>            
-            <form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
-                <button class="ui red basic button">Delete</button>
-            </form>
+            <% if(user && blog.author.id.equals(user._id)) { %>
+                <a class="ui orange basic button" href="/blogs/<%= blog._id %>/edit">Edit</a>            
+                <form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+                    <button class="ui red basic button">Delete</button>
+                </form>
+            <% } %>
         </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ const router = express.Router();
 const Blog = require('./../models/blog');
 
 const isAuthenticated = require('./../middleware/auth');
+const isAuthor = require('./../middleware/author');
 
 router.use((req, res, next) => {
     res.locals.user = req.user;
@@ -65,18 +66,18 @@ router.get('/blogs/:id', (req, res) => {
 });
 
 // Edit 
-router.get('/blogs/:id/edit', (req, res) => {
+router.get('/blogs/:id/edit', isAuthor, (req, res) => {
     Blog.findById(req.params.id)
         .then(blog => {
             res.render('edit', {blog});
         })
         .catch(err => {
-            res.redirect('/blogs');
+            res.redirect('back');
         });
 });
 
 // Update
-router.put('/blogs/:id', isAuthenticated, (req, res) => {
+router.put('/blogs/:id', isAuthor, (req, res) => {
     req.body.blog.body = req.sanitize(req.body.blog.body)
     Blog.findByIdAndUpdate(req.params.id, req.body.blog)
         .then(blog => {
@@ -88,7 +89,7 @@ router.put('/blogs/:id', isAuthenticated, (req, res) => {
 });
 
 // Delete
-router.delete('/blogs/:id', isAuthenticated, (req, res) => {
+router.delete('/blogs/:id', isAuthor, (req, res) => {
     Blog.findByIdAndRemove(req.params.id)
         .then(blog => {
             res.redirect('/blogs');
