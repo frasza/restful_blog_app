@@ -33,9 +33,18 @@ router.get('/blogs/new', isAuthenticated, (req, res) => {
 });
 
 // Create
-router.post('/blogs', (req, res) => {
+router.post('/blogs', isAuthenticated, (req, res) => {
     req.body.blog.body = req.sanitize(req.body.blog.body)
-    Blog.create(req.body.blog)
+    const blog = {
+        title: req.body.blog.title,
+        image: req.body.blog.image,
+        body: req.body.blog.body,
+        author: {
+            id: req.user._id,
+            username: req.user.username
+        }
+    }
+    Blog.create(blog)
         .then(blog => {
             res.redirect('/blogs');
         })
@@ -67,7 +76,7 @@ router.get('/blogs/:id/edit', (req, res) => {
 });
 
 // Update
-router.put('/blogs/:id', (req, res) => {
+router.put('/blogs/:id', isAuthenticated, (req, res) => {
     req.body.blog.body = req.sanitize(req.body.blog.body)
     Blog.findByIdAndUpdate(req.params.id, req.body.blog)
         .then(blog => {
@@ -79,7 +88,7 @@ router.put('/blogs/:id', (req, res) => {
 });
 
 // Delete
-router.delete('/blogs/:id', (req, res) => {
+router.delete('/blogs/:id', isAuthenticated, (req, res) => {
     Blog.findByIdAndRemove(req.params.id)
         .then(blog => {
             res.redirect('/blogs');

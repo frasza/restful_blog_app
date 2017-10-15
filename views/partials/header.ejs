@@ -20,6 +20,7 @@
             <a href="/blogs/new" class="item">New Post</a>
             <div class="right menu">
                 <% if (user) { %>
+                <a class="ui item">Signed in As: <%= user.username %></a>
                 <a class="ui item" href="/user/logout">Logout</a>
                 <% } else { %>
                 <a class="ui item" href="/user/register">Register</a>
